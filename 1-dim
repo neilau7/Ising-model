@@ -1,0 +1,74 @@
+#1-dim-Ising Model(l X l lattice)
+import numpy as np
+import random
+import matplotlib.pyplot as plt
+from mpl_toolkits import mplot3d
+%matplotlib inline
+#A
+l=50  #一個LXL晶格中，一層的spin數量
+p=0.99  #IS=1的機率
+n=300  #將LXL的晶格重複模擬n次
+
+random.seed( 10 )
+#B
+
+'''
+如果想換成互動式輸入可將上述(#A至#B)改成以下(####至####)
+####
+l=input("l=")
+p=input("p=")
+
+####
+'''
+
+l1=1    #起始標籤
+lp=l #最後標籤 
+lm=lp+1
+
+spin=[]  #建立各變數的空陣列
+m_p=[]
+avgm_n=[]
+
+
+        
+for i in range(n):
+    m=0
+    M=0
+    spin.clear()
+   
+    for j in range(lm+1):
+        spin.append(-1)
+        if random.random() < p :
+            spin[j]=1
+    
+    for j in range(l1,lp+1,1):
+        if spin[j-1]+spin[j+1]==0:
+            spin[j]=spin[j]*(-1)
+            m=m+spin[j]                     #晶包的磁性強度與方向
+    m_p.append(m)
+    for j in range(l1,lp+1,1):
+        M+=spin[j]
+    avgm_n.append(M/(l**2))
+    #print(i+1,m)
+
+    
+    
+fig = plt.figure()
+ax = plt.subplot()
+ax.scatter(range(1,n+1,1),m_p , s=1, alpha=1,marker='.',color='black')  # 绘制散点图
+plt.title("The correation between the n-th of lattice and m")
+plt.xlabel("Lattice site(n)")
+plt.ylabel("m(Spontaneous magnetization) ")
+#plt.savefig('The correation between the n-th period of lattice and m.png')
+plt.show()
+
+fig = plt.figure()
+ax = plt.subplot()
+ax.scatter(range(1,n+1,1), avgm_n, s=1, alpha=1,marker='.',color='black')  # 绘制散点图
+plt.title("The correlation between lattice site n and M")
+plt.xlabel("Lattice site(n)")
+plt.ylabel("M_1(Average magnetization for unit cell) ")
+#plt.savefig('The correlation between lattice site n and M.png')
+plt.show()
+
+
